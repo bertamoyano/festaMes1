@@ -3,21 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>¡T'han convidat a la festa del +1! ✨</title>
+    <title>Invitación Fiesta del +1 ✨</title>
     <style>
+        /* RESET BÁSICO */
         body, html {
-            margin: 0; padding: 0;
-            width: 100%; height: 100%;
-            background-color: #000; /* Color de seguridad */
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: #000;
             font-family: 'Helvetica Neue', Arial, sans-serif;
-            overflow: hidden; /* Evita que el body escandale */
+            overflow: hidden; /* Evita scrolls fantasma en el inicio */
         }
 
-        /* ----- TU FONDO GLITTER (Directo, sin overlay ni opacidad) ----- */
+        /* ----- PANTALLA 1: EL SOBRE Y EL GLITTER ----- */
         .glitter-bg {
-            position: fixed; top: 0; left: 0;
-            width: 100%; height: 100%;
-            /* Ajusta la extensión si tu fondo es .png */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
             background-image: url('img/fondo.jpg'); 
             background-size: cover;
             background-position: center;
@@ -25,12 +30,14 @@
         }
 
         .main-container {
-            display: flex; flex-direction: column;
-            justify-content: center; align-items: center;
-            height: 100vh; width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100%;
         }
 
-        /* ----- EL SOBRE ----- */
         #sobre-box {
             cursor: pointer;
             text-align: center;
@@ -46,33 +53,49 @@
         }
 
         .texto-click {
-            color: white; margin-top: 25px;
-            font-weight: bold; font-size: 1.3em;
-            letter-spacing: 2px; text-transform: uppercase;
+            color: white;
+            margin-top: 25px;
+            font-weight: bold;
+            font-size: 1.3em;
+            letter-spacing: 2px;
+            text-transform: uppercase;
             text-shadow: 0 0 10px #ff69b4, 0 0 20px #ff69b4;
         }
 
-        /* ----- INVITACIÓN DE CANVA (PNG CON SCROLL) ----- */
+        /* ----- PANTALLA 2: INVITACIÓN PNG (CENTRADA Y NEGRA) ----- */
         #invitacion-canva {
-            display: none;
+            display: none; /* Se cambia a 'flex' por JS */
             width: 100vw;
             height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
-            z-index: 100; /* Tapa el sobre y el glitter */
-            background-color: #fff; /* Fondo blanco para la invitación */
-            overflow-y: auto; /* Permite scroll vertical */
+            z-index: 100;
+            background-color: #000; /* Fondo negro para bordes sobrantes */
+            
+            /* Centrado dinámico */
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start; /* Permite que el scroll empiece arriba */
+            
+            overflow-y: auto; 
             -webkit-overflow-scrolling: touch;
         }
 
         #invitacion-canva img {
             width: 100%;
-            height: auto; /* Fundamental para que el scroll funcione */
+            height: auto;
             display: block;
+            /* Si la imagen es más corta que el móvil, se centra verticalmente */
+            margin: auto 0; 
         }
 
-        /* Animaciones */
+        /* Ocultar barra de scroll para estética pura */
+        #invitacion-canva::-webkit-scrollbar {
+            display: none;
+        }
+
+        /* ANIMACIONES */
         @keyframes bounce {
             0%, 100% { transform: translateY(0); }
             50% { transform: translateY(-20px); }
@@ -97,21 +120,25 @@
     </div>
 
     <div id="invitacion-canva">
-        <img src="img/invitacion.png" alt="Invitación de la Fiesta">
+        <img src="img/invitacion.png" alt="Invitación Fiesta del +1">
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 
     <script>
         function abrirInvitacion() {
+            // 1. Desvanecer sobre
             const sobre = document.getElementById('sobre-box');
             sobre.classList.add('fade-out');
 
+            // 2. Mostrar invitación con delay para la transición
             setTimeout(() => {
                 const invitacion = document.getElementById('invitacion-canva');
-                invitacion.style.display = 'block';
                 
-                // Confeti al abrir
+                // Usamos 'flex' para que los estilos de centrado funcionen
+                invitacion.style.display = 'flex';
+                
+                // 3. Disparar confeti
                 confetti({
                     particleCount: 150,
                     spread: 70,
